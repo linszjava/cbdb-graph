@@ -1,0 +1,15 @@
+# CBDB 勘误表 —— 作用于导出后的 CSV，不触碰 latest/ 下的原始快照
+# 每季度 CBDB 更新后重跑管道，这些修正会自动重新套用；删掉某行即可撤销该修正。
+#
+# 列：类型 / 目标 / 字段 / 原值 / 新值 / 依据
+#
+# 类型 kincode  —— 修正 rels_kin.csv 中该关系码的步数向量
+# 类型 person   —— 修正 nodes_person.csv 中该 personId 的字段
+#
+类型	目标	字段	原值	新值	依据
+kincode	278	upstep	8	0	CBDB 自身约定 G+ 表向下、G- 表向上。对照 G+73(七十三世孫)=up0/down73、G-8B(八世叔伯祖)=up8/down0，可知 BG+8 的步数被填入了错误的列。全表同逻辑扫描仅此 278/280 两例。
+kincode	278	dwnstep	0	8	同上
+kincode	280	upstep	9	0	同 278，关系为兄弟之九世孫(BG+9)。
+kincode	280	dwnstep	0	9	同上
+person	189289	birthYear	883	833	卒年 873 早于所记生年 883，自相矛盾。库内 c_death_age=41，由卒年反推生年为 833；唐懿宗李漼生卒 833-873、在位 859-873 亦为定说。883 系 833 之形近误录。
+person	145698	birthYear	742	795	由生卒年算得寿数 129，与库内所记 c_death_age=77 直接冲突。以享年为准反推，生年应为 795（871-77+1）。

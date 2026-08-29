@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: cbdb-graph
+  neo4j:
+    uri: ${NEO4J_URI:bolt://localhost:7687}
+    authentication:
+      username: ${NEO4J_USER:neo4j}
+      password: ${NEO4J_PASSWORD}
+    pool:
+      max-connection-pool-size: 50
+
+cbdb:
+  # 子图上限。全库最大度数 2532（朱熹），设 6000 可容纳任何 1 跳网络；
+  # 2、3 跳仍可能超出，此时前端会提示截断
+  ego-node-limit: 6000
+  max-hops: 3
+  search-limit: 25
+  cors-origins: http://localhost:5173,http://localhost:4173
+
+logging:
+  level:
+    org.springframework.data.neo4j.cypher: INFO

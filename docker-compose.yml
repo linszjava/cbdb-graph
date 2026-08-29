@@ -1,0 +1,43 @@
+name: cbdb
+
+services:
+  neo4j:
+    image: neo4j:2026.07.1
+    container_name: neo4j
+    ports: ["7474:7474", "7687:7687"]
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD}
+      NEO4J_PLUGINS: '["apoc","graph-data-science"]'
+      NEO4J_server_memory_heap_initial__size: 4G
+      NEO4J_server_memory_heap_max__size: 4G
+      NEO4J_server_memory_pagecache_size: 4G
+      NEO4J_dbms_security_procedures_unrestricted: gds.*,apoc.*
+      NEO4J_dbms_security_procedures_allowlist: gds.*,apoc.*
+      # APOC 的文件导出默认关闭，不开就用不了 apoc.export.*
+      NEO4J_apoc_export_file_enabled: "true"
+      NEO4J_apoc_import_file_enabled: "true"
+      NEO4J_server_directories_import: /var/lib/neo4j/import
+    volumes:
+      - ${NEO4J_HOME}/neo4j-data:/data
+      - ${NEO4J_HOME}/neo4j-import:/var/lib/neo4j/import
+      - ${NEO4J_HOME}/neo4j-export:/exports
+      - neo4j-logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p $${NEO4J_PASSWORD} 'RETURN 1' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+
+# backend / frontend 等工程建好后再取消注释
+#  backend:
+#    build: ./backend
+#    ports: ["8080:8080"]
+#    environment:
+#      SPRING_NEO4J_URI: bolt://neo4j:7687
+#      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
+#      SPRING_NEO4J_AUTHENTICATION_PASSWORD: ${NEO4J_PASSWORD}
+#    depends_on:
+#      neo4j: {condition: service_healthy}
+
+volumes:
+  neo4j-logs:

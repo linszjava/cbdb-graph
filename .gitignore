@@ -1,0 +1,42 @@
+# ── CBDB 原始数据与派生产物 ──
+# 体积大且可再生成，不入库。快照从 CBDB 官方下载后放进 latest/
+
+latest/
+latest.zip
+
+# export.sh 的产出，约 208 MB
+neo4j/csv/
+
+# 审计结果，每次跑都不同
+neo4j/audit-*.txt
+
+# 默认的 Neo4j 运行目录
+neo4j-runtime/
+
+# 兜底：任何数据库文件与转储，无论放在哪个目录
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.mdb
+*.accdb
+neo4j/*.csv
+**/neo4j-data/
+**/neo4j-import/
+**/neo4j-export/
+
+# ── 凭据 ──
+.env
+
+# ── 构建产物 ──
+backend/target/
+frontend/node_modules/
+frontend/dist/
+*.class
+
+# ── 编辑器与系统 ──
+.DS_Store
+.idea/
+.vscode/
+*.iml
+*.log
